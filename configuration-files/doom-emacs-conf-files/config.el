@@ -1,8 +1,44 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; Personal Info
+(setq user-full-name "Oleksiy Nehlyadyuk"
+      user-mail-address "savolla@protonmail.com")
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+;; Transparency Configuration
+(add-to-list 'default-frame-alist '(alpha . (90 . 92)))
+
+;; vterm Configuration
+(after! vterm
+  (set-popup-rule! "*doom:vterm-popup"
+    :size 0.15
+    ;; :vslot -4
+    :select t
+    :quit nil))
+
+;; Treemacs Configuration
+(after! treemacs
+  (treemacs-follow-mode 1)
+  (setq treemacs-width 30)
+  (setq treemacs-position 'right))
+
+;; Window Split Configuration
+(setq evil-vsplit-window-right t ;; automatic focus when splitted
+      evil-split-window-below t) ;; automatic focus when splitted
+(setq split-width-threshold 240)
+
+;; Workspace Configuration
+(map! :leader :desc "next workspace"          "TAB l" #'+workspace:switch-next ) ;; workspace next
+(map! :leader :desc "previous workspace"      "TAB h" #'+workspace:switch-previous ) ;; workspace previous
+(setq +workspaces-on-switch-project-behavior t) ;; always open a new workspace when opening new project
+
+;; Splash Screen Configuraion
+(setq fancy-splash-image (concat doom-user-dir "gravatar-savolla.png")) ;; set custom splash
+(defun doom-dashboard-widget-footer ())
+
+;; disable cl is deprecated warning. TODO: delete this soon
+;; (setq byte-compile-warnings '(cl-functions))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -21,8 +57,8 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "Fira Code" :size 18 :weight 'semi-light)
-     doom-variable-pitch-font (font-spec :family "Fira Sans" :size 19))
+(setq doom-font (font-spec :family "Fira Code" :size 22 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 23))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
