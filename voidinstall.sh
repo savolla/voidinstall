@@ -32,11 +32,11 @@ if [ $INSTALL_FIRACODE_FONT -eq 1 ]; then
 fi
 
 if [ $INSTALL_GO -eq 1 ]; then
-   installGoProgrammingLanguage
+    installGoProgrammingLanguage
 fi
 
 if [ $INSTALL_WEB_DEV_STUFF -eq 1 ]; then
-   installWebDevStuff
+    installWebDevStuff
 fi
 
 if [ $DEV_HELPER_TOOLS -eq 1 ]; then
@@ -44,7 +44,7 @@ if [ $DEV_HELPER_TOOLS -eq 1 ]; then
 fi
 
 if [ $JAVA -eq 1 ]; then
-   installJava
+    installJava
 fi
 
 if [ $RUST -eq 1 ]; then
@@ -139,6 +139,23 @@ if [ $ENABLE_SSH -ne 1 ]; then
     disableSSH
 fi
 
+# Distrobox related
+if [ $INSTALL_DISTROBOX -eq 1 ]; then
+    installDistrobox
+fi
+
+if [ $INSTALL_FEDORA_COVERAGE -eq 1 ]; then
+    installFedoraCoverage
+fi
+
+if [ $INSTALL_UBUNTU_COVERAGE -eq 1 ]; then
+    installUbuntuCoverage
+fi
+
+if [ $INSTALL_ARCH_COVERAGE -eq 1 ]; then
+    installArchCoverage
+fi
+
 if [ $ENABLE_PSD -eq 1 ]; then
     enablePSD
 fi
@@ -150,4 +167,13 @@ if [ $EMPTTY -eq 1 ]; then
     installEmpttyLoginManager
 fi
 
-sudo reboot
+echo "Installation is finished.
+just before you reboot do the followings;
+1. if you installed distrobox coverage distros do
+   distrobox enter fedora
+   distrobox enter ubuntu
+   distrobox enter archlinux
+   one by one to auto install all needed packages
+
+2. reboot the system
+"

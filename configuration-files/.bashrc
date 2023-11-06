@@ -11,7 +11,7 @@ PS1='[\u@\h \W]\$ '
 # settings for Go programming language
 # changing go packages installation path
 export GOPATH=$HOME/area/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$PATH/.local/bin
 
 alias grep="grep --color=always" # Color grep - highlight desired sequence.
 alias g="cd"

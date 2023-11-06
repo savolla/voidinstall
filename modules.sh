@@ -1,11 +1,11 @@
 #!/bin/bash
 
-updateSystem () {
+updateSystem() {
     sudo xbps-install -S xbps -y
     sudo xbps-install -Syu
 }
 
-placeVitalFiles () {
+placeVitalFiles() {
     # xinitrc
     rm ~/.xinitrc
     ln -sf "$(pwd)"/configuration-files/.xinitrc /home/"$USER"/
@@ -15,7 +15,30 @@ placeVitalFiles () {
     ln -sf "$(pwd)"/configuration-files/.bashrc /home/"$USER"/
 }
 
-installVitalPackages () {
+replaceSudoWithDoas() {
+    exit
+}
+
+installDistrobox() {
+    sudo xbps-install -S podman -y
+    sudo ln -sf /etc/sv/podman /var/service/
+    sudo ln -sf /etc/sv/podman-docker /var/service/
+    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+}
+
+installFedoraCoverage() {
+    ~/.local/bin/distrobox create --image registry.fedoraproject.org/fedora-toolbox:39 --name fedora
+}
+
+installUbuntuCoverage() {
+    ~/.local/bin/distrobox create --image docker.io/library/ubuntu:22.04 --name ubuntu
+}
+
+installArchCoverage() {
+    ~/.local/bin/distrobox create --image docker.io/library/archlinux:latest --name archlinux
+}
+
+installVitalPackages() {
     sudo xbps-install -S git -y
     sudo xbps-install -S curl -y
     sudo xbps-install -S wget -y
@@ -45,7 +68,7 @@ installVitalPackages () {
     sudo xbps-install -S unclutter-xfixes -y
 }
 
-createPARAfolderStructure () {
+createPARAfolderStructure() {
     ## remove all empty unnecessary files
     rmdir ~/*
     ## create folder structure
@@ -56,7 +79,7 @@ createPARAfolderStructure () {
     mkdir -p ~/archive
 }
 
-installDoomEmacs () {
+installDoomEmacs() {
     sudo xbps-install -S emacs-x11 -y
     sudo xbps-install -S ripgrep -y
     sudo xbps-install -S fd -y
@@ -70,20 +93,20 @@ installDoomEmacs () {
     ln -s "$(pwd)"/configuration-files/doom-emacs-conf-files/gravatar-savolla.png /home/"$USER"/.config/doom/
 }
 
-installFiracodeFont () {
+installFiracodeFont() {
     sudo xbps-install -S font-fira-otf -y
     sudo xbps-install -S font-fira-ttf -y
     sudo xbps-install -S font-firacode -y
 }
 
-installGoProgrammingLanguage () {
+installGoProgrammingLanguage() {
     sudo xbps-install -S go -y
     go install github.com/x-motemen/gore/cmd/gore@latest
     go install github.com/cweill/gotests@latest
     go install github.com/fatih/gomodifytags@latest
 }
 
-installWebDevStuff () {
+installWebDevStuff() {
     sudo xbps-install -S nodejs -y
     sudo xbps-install -S jq -y
     sudo xbps-install -S tidy5 -y
@@ -94,7 +117,7 @@ installWebDevStuff () {
     sudo xbps-install -S shellcheck -y
 }
 
-installProgrammingHelperTools () {
+installProgrammingHelperTools() {
     sudo xbps-install -S nodejs -y
     sudo xbps-install -S cmake -y
     sudo xbps-install -S base-devel -y
@@ -117,22 +140,21 @@ installProgrammingHelperTools () {
 
 }
 
-installRust () {
+installRust() {
     sudo xbps-install -S rust-analyzer -y
     sudo xbps-install -S cargo -y
     sudo xbps-install -S rustc -y
 }
 
-installJava () {
+installJava() {
     sudo xbps-install -S openjdk -y
 }
 
-installRuby () {
+installRuby() {
     sudo xbps-install -S ruby -y
 }
 
-
-installDwm () {
+installDwm() {
     sudo xbps-install -S xorg -y
     sudo xbps-install -S dmenu -y
     sudo xbps-install -S dwm -y
@@ -140,7 +162,7 @@ installDwm () {
     sudo xbps-install -S slock -y
 }
 
-installGnome () {
+installGnome() {
     sudo xbps-install -S xorg -y
     sudo xbps-install -S gnome -y
     sudo xbps-install -S gdm -y
@@ -153,7 +175,7 @@ installGnome () {
     setupPulseaudio
 }
 
-enablePSD () {
+enablePSD() {
     git clone https://github.com/madand/runit-services
     cd runit-services || exit
     sudo mv psd /etc/sv/
@@ -161,26 +183,26 @@ enablePSD () {
     sudo chmod +x etc/sv/psd/*
 }
 
-installThunar () {
+installThunar() {
     sudo xbps-install -S Thunar -y
     sudo xbps-install -S thunar-volman -y
 }
 
-installFirefox () {
+installFirefox() {
     sudo xbps-install -S firefox -y
 }
 
-installTransmission () {
+installTransmission() {
     sudo xbps-install -S transmission-gtk -y
 }
 
-installRanger () {
+installRanger() {
     sudo xbps-install -S ranger -y
     sudo xbps-install -S w3m -y
     sudo xbps-install -S w3m-img -y
 }
 
-installDocker () {
+installDocker() {
     sudo xbps-install -S docker -y
     sudo ln -sf /etc/sv/docker/ /var/service/
 
@@ -188,7 +210,7 @@ installDocker () {
     go install github.com/jessfraz/dockfmt@latest # for doom emacs
 }
 
-enableBluetooth () {
+enableBluetooth() {
     sudo xbps-install -S bluez -y
     sudo usermod -aG bluetooth "$USER"
     sudo xbps-install -S dbus -y
@@ -196,13 +218,13 @@ enableBluetooth () {
     sudo ln -sf /etc/sv/bluetoothd/ /var/service/
 }
 
-setupAlsa () {
+setupAlsa() {
     sudo usermod -aG audio "$USER"
     sudo xbps-install -S bluez-alsa -y
     sudo ln -sf /etc/sv/bluez-alsa/ /var/service/
 }
 
-setupPipewire () {
+setupPipewire() {
     sudo usermod -aG audio "$USER"
     sudo xbps-install -S pipewire -y
     sudo xbps-install -S wireplumber-elogind -y
@@ -211,7 +233,7 @@ setupPipewire () {
     sudo ln -sf /usr/share/examples/wireplumber/10-wireplumber.conf /etc/pipewire/pipewire.conf.d/
 }
 
-setupPulseaudio () {
+setupPulseaudio() {
     sudo usermod -aG audio "$USER"
     sudo xbps-install -S pulseaudio -y
     sudo xbps-install -S pulseaudio-utils -y
@@ -221,8 +243,7 @@ setupPulseaudio () {
     sudo ln -sf /etc/sv/dbus/ /var/service/
 }
 
-
-installXdgRelatedStuff () {
+installXdgRelatedStuff() {
     sudo xbps-install -S xdg-utils -y
     sudo xbps-install -S xdg-desktop-portal -y
     sudo xbps-install -S xdg-desktop-portal-gtk -y
@@ -230,7 +251,7 @@ installXdgRelatedStuff () {
     sudo xbps-install -S xdg-user-dirs-gtk -y
 }
 
-enableVitalServices () {
+enableVitalServices() {
     sudo xbps-install -S dbus -y
     sudo ln -sf /etc/sv/dbus/ /var/service/
     sudo ln -sf /etc/sv/polkitd/ /var/service/
@@ -238,23 +259,23 @@ enableVitalServices () {
     sudo ln -sf /etc/sv/elogind /var/service/ # needed for redirecting usb devices into vms
 }
 
-enableVideoAcceleration () {
+enableVideoAcceleration() {
     sudo xbps-install -Rs mesa-vdpau mesa-vaapi -y
 }
 
-installProprietaryNvidiaDrivers () {
+installProprietaryNvidiaDrivers() {
     xbps-install -Sy void-repo-nonfree -y
     xbps-install -S nvidia -y
 }
 
-enableNixPackageManager () {
+enableNixPackageManager() {
     sudo xbps-install -S nix -y
     sudo ln -sf /etc/sv/nix-daemon /var/service
     sudo nix-channel --add https://nixos.org/channels/nixpkgs-unstable
     sudo nix-channel --update
 }
 
-installLogseq () {
+installLogseq() {
     enableNixPackageManager
     export NIXPKGS_ALLOW_INSECURE=1
     nix-env -iA nixpkgs.logseq
@@ -262,14 +283,14 @@ installLogseq () {
     sudo ln -sf "$(pwd)"/configuration-files/nix-programs/logseq /bin/
 }
 
-installLibrewolf () {
+installLibrewolf() {
     enableNixPackageManager
     nix-env -iA nixpkgs.librewolf
     sudo chmod +x "$(pwd)"/configuration-files/nix-programs/librewolf
     sudo ln -sf "$(pwd)"/configuration-files/nix-programs/librewolf /bin/
 }
 
-setupKVM () {
+setupKVM() {
     ## setup libvirt
     sudo xbps-install -S virt-manager libvirt qemu bridge-utils iptables -y
     sudo ln -sf "$(pwd)"/configuration-files/libvirt.conf /etc/libvirt/
@@ -283,39 +304,38 @@ setupKVM () {
     sudo xbps-install -S virt-viewer -y
 }
 
-enableAutoMountingDisks () {
+enableAutoMountingDisks() {
     sudo xbps-install -S udiskie -y
     sudo xbps-install -S python3-distutils-extra -y # needed for udiskie to work
     sudo cp "$(pwd)"/configuration-files/10-udisks2.rules /etc/polkit-1/rules.d/
 }
 
-enableHotKeyDaemon () {
+enableHotKeyDaemon() {
     sudo xbps-install -S sxhkd -y
     mkdir /home/"$USER"/.config/sxhkd
     ln -sf "$(pwd)"/configuration-files/sxhdkrc /home/"$USER"/.config/sxhkd/
 }
 
-enableRedshift () {
+enableRedshift() {
     sudo xbps-install -S redshift -y
     ln -sf "$(pwd)"/configuration-files/redshift.conf /home/"$USER"/.config/
 }
 
-enableTapToClick () {
+enableTapToClick() {
     sudo mkdir /etc/X11/xorg.conf.d
     sudo ln -sf "$(pwd)"/configuration-files/30-touchpad.conf /etc/X11/xorg.conf.d/
 }
 
-disableSSH () {
+disableSSH() {
     sudo rm /var/service/sshd
 }
 
-removeXbpsCache () {
+removeXbpsCache() {
     sudo xbps-remove -Oo -y
 }
 
-installEmpttyLoginManager () {
+installEmpttyLoginManager() {
     sudo xbps-install -S emptty -y
     sudo rm /etc/emptty/conf
     sudo ln -sf "$(pwd)"/configuration-files/conf /etc/emptty/
 }
-
