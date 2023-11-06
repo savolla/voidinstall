@@ -27,3 +27,7 @@ alias pg="ping gnu.org"
 alias create-python-environment="python -m venv --upgrade-deps ./venv"
 alias activate-python-environment="chmod +x ./venv/bin/activate && source ./venv/bin/activate"
 alias install-python-requirements="sudo pip install -r requirements.txt"
+
+doasedit() {
+    emacsclient -nw /doas::${1}
+}
